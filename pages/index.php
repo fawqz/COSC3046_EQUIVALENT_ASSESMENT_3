@@ -53,7 +53,7 @@
                         echo '<div class="card-body">';
                         echo '<h5 class="card-title">' . $row['product_name'] . '</h5>';
                         echo '<p class="card-text">' . $row['description'] . '</p>';
-                        echo '<p class="card-text">$' . $row['price'] . '</p>';
+                        echo '<p class="card-text-price">$' . $row['price'] . '</p>';
                 
                         $product_id = $row['product_id'];
                         $sql_sizes = "SELECT size FROM product_sizes WHERE product_id = $product_id";
@@ -70,7 +70,7 @@
                         echo '</select>';
                 
                         echo '<p class="card-text">Color: ' . $row['color'] . '</p>';
-                        echo '<button class="btn btn-primary addToCartBtn">Add to Cart</button>';
+                        echo '<button class="btn btn-primary addToCartBtn" data-productid="' . $row['product_id'] . '">Add to Cart</button>';
                         echo '</div></div></div>';
                     }
                 } else {
@@ -80,7 +80,7 @@
 
 
 
-                $conn->close();
+                
 
                 ?>
 
@@ -92,6 +92,80 @@
 
 <h1>Cart</h1>
 
+<script>
+document.addEventListener("click", (event) => {
+    if (!event.target.closest(".cart-container") && !event.target.closest(".cart-btn")) {
+        cart.classList.remove("active");
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var addToCartButtons = document.querySelectorAll('.addToCartBtn');
+    var cartContainer = document.querySelector('.cart-container'); 
+
+    addToCartButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            var productId = this.getAttribute('data-productid');
+            var productName = this.parentNode.querySelector('.card-title').innerText;
+            var productDescription = this.parentNode.querySelector('.card-text').innerText;
+            var productPrice = this.parentNode.querySelector('.card-text-price').innerText;
+
+            if (!products[productId]) {
+                products[productId] = {
+                    name: productName,
+                    description: productDescription,
+                    price: productPrice,
+                    quantity: 1
+                };
+            } else {
+                products[productId].quantity++;
+            }
+
+            renderCart();
+        });
+    });
+function renderCart() {
+    if (cartContainer) {
+        cartContainer.innerHTML = '';
+
+        for (var productId in products) {
+            var product = products[productId];
+
+            cartContainer.innerHTML += '<div>' +
+                '<h4>' + product.name + '</h4>' +
+                '<p>' + product.description + '</p>' +
+                '<div class="quantity-input" >' +
+                '<label for="quantity">Quantity:</label>' +
+                '<input type="number" min="1" value="' + product.quantity + '" data-productid="' + productId + '"id="quantity" onkeydown="return false" style= "border: none;">' +
+                '<p>' + product.price + '</p>' +
+                '<button class="removeFromCartBtn" data-productid="' + productId + '" style="background-color: #ff6347; color: #fff; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px;">Remove product</button>'
+                '</div>' +
+                '</div>';
+        }
+    }
+}
+
+var products = {};
+
+
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('removeFromCartBtn')) {
+            var productId = event.target.getAttribute('data-productid');
+
+            if (products[productId]) {
+                delete products[productId];
+                renderCart();
+            }
+        }
+    });
+});
+
+
+
+
+
+</script>
 </div>
 
 
@@ -102,16 +176,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-
-let cartBtn = document.querySelector(".cart-btn");
-let cart= document.querySelector(".cart-container");
-
-cartBtn.onclick = () => {
-cart.classList.add("active");
-}
-
-  </script>
+ 
 
 </body>
 </html>
