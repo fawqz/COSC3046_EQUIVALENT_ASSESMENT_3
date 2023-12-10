@@ -1,12 +1,12 @@
 let cartBtn = document.querySelector(".cart-btn");
 let cart= document.querySelector(".cart-container");
-
+//When cart button is clicked, cart appears from the side 
 cartBtn.onclick = () => {
 cart.classList.add("active");
 }
 
 
-
+//To validate the date and year for the credit card details the user inputs 
 document.addEventListener('DOMContentLoaded', function() {
     const expiryDateField = document.getElementById('expiryDate');
     const expiryDateError = document.getElementById('expiryDateError');

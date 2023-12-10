@@ -7,6 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+  <!-- Header/Navigation  -->
   <header class="" style="background-color:#EEF5FF;" >
     <div class="container">
       <nav class="navbar navbar-expand-lg " style="background-color:#EEF5FF; color:black">
@@ -26,6 +27,7 @@
   </header>
 
   <main>
+    <!-- Order confirmed message  -->
     <div class="container mt-5">
       <div class="alert alert-success" role="alert">
         Order has been processed successfully!
