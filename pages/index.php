@@ -8,8 +8,8 @@
     <script src="scripts.js" defer></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <header >
+        <nav class="navbar navbar-expand-lg " style="background-color: #eef5ff;" >
             <div class="container">
                 <a class="navbar-brand" href="#">Echo Apparel</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@
         </nav>
     </header>
     
-    <main class="container py-4">
+    <main class="container py-4" >
         <section class="products">
             <h2 class="text-center mb-4">Our Products</h2>
             <div class="row">
@@ -90,13 +90,14 @@
 
 <div class="cart-container">
 
-<h1>Cart</h1>
+<h1>Your Cart</h1>
 
 <script>
+
 document.addEventListener("click", (event) => {
-    if (!event.target.closest(".cart-container") && !event.target.closest(".cart-btn")) {
-        cart.classList.remove("active");
-    }
+  if (!event.target.closest(".cart-container") && !event.target.closest(".cart-btn")) {
+      cart.classList.remove("active");
+  }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -105,11 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     addToCartButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
+            
             var productId = this.getAttribute('data-productid');
             var productName = this.parentNode.querySelector('.card-title').innerText;
             var productDescription = this.parentNode.querySelector('.card-text').innerText;
             var productPrice = this.parentNode.querySelector('.card-text-price').innerText;
 
+
+        
             if (!products[productId]) {
                 products[productId] = {
                     name: productName,
@@ -124,28 +128,59 @@ document.addEventListener('DOMContentLoaded', function() {
             renderCart();
         });
     });
+
+    var products = {};
+
 function renderCart() {
     if (cartContainer) {
-        cartContainer.innerHTML = '';
+      var cartHTML= '<div class="cart-title">' +
+                            '<h1>Your Cart</h1>' +
+                        '</div>';
 
         for (var productId in products) {
             var product = products[productId];
 
-            cartContainer.innerHTML += '<div>' +
+            cartHTML += '<div>' +
                 '<h4>' + product.name + '</h4>' +
                 '<p>' + product.description + '</p>' +
                 '<div class="quantity-input" >' +
                 '<label for="quantity">Quantity:</label>' +
-                '<input type="number" min="1" value="' + product.quantity + '" data-productid="' + productId + '"id="quantity" onkeydown="return false" style= "border: none;">' +
+                '<input type="number" min="1" value="' + product.quantity + '" data-productid="' + productId + '"id="quantity" onkeydown="return false" style= "border: none; margin-bottom:10px">' +
                 '<p>' + product.price + '</p>' +
-                '<button class="removeFromCartBtn" data-productid="' + productId + '" style="background-color: #ff6347; color: #fff; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px;">Remove product</button>'
+                '<button class="removeFromCartBtn" data-productid="' + productId + '" style="background-color: #ff6347; color: #fff; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; margin-bottom:10px;">Remove product</button>'
                 '</div>' +
                 '</div>';
         }
+
+        cartContainer.innerHTML= cartHTML;
+
+        var checkoutLink = document.createElement('a');
+        checkoutLink.href = 'checkout.php'; 
+
+        var checkoutButton = document.createElement('button');
+        checkoutButton.id = 'proceedToCheckoutBtn';
+        checkoutButton.textContent = 'Proceed to Checkout';
+        checkoutButton.style.backgroundColor = '#428bca';
+        checkoutButton.style.color = '#fff';
+        checkoutButton.style.border = 'none';
+        checkoutButton.style.padding = '8px 12px';
+        checkoutButton.style.cursor = 'pointer';
+        checkoutButton.style.borderRadius = '4px';
+
+        checkoutLink.appendChild(checkoutButton);
+        cartContainer.appendChild(checkoutLink);
+
+        checkoutButton.addEventListener('click', function() {
+        var cartData = JSON.stringify(products);
+        window.location.href = 'process_form.php?cart=' + encodeURIComponent(cartData);
+    });
+ 
     }
 }
 
-var products = {};
+
+
+
 
 
 
@@ -166,12 +201,14 @@ var products = {};
 
 
 </script>
+
+
 </div>
 
 
     
-    <footer class="bg-light text-center py-3">
-        <p>&copy; Store</p>
+    <footer class="text-center py-3" style="background-color: #eef5ff;" >
+        <p>ECHO Appearl Store</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
